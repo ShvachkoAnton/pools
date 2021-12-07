@@ -5,7 +5,7 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
- 
+from django.contrib.auth.decorators import login_required
 from .models import Question, Choice
 
 def index(request):
@@ -22,6 +22,7 @@ def detail(request,question_id):
 def results(request, question_id):
     question=get_object_or_404(Question, pk=question_id)
     return render(request, 'results.html', {'question':question})
+@login_required
 def vote(request, question_id):
     question=get_object_or_404(Question, pk=question_id)
     try:
@@ -36,3 +37,5 @@ def vote(request, question_id):
         selected_choice.save()
         return HttpResponseRedirect(reverse('results', args=(question.id,)))
     
+
+
